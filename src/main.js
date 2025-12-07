@@ -3,7 +3,7 @@ import 'flowbite';
 
 import { createApp } from 'vue'
 
-// App.vue seabagai
+// App.vue sebagai root di
 import App from './App.vue'
 
 // import route sebagai tempat perpidahan halaman / component

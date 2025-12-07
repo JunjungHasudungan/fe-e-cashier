@@ -12,9 +12,9 @@
       </div>
     </header>
 
-    <!-- Page Content -->
+     <!-- Page Content -->
     <main>
-      <slot />
+      <router-view />
     </main>
   </div>
 </template>

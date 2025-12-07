@@ -2,11 +2,11 @@
     <div class="rounded-sm flex fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
-            <div class="bg-gray-800 relative border border-default rounded-sm shadow-sm p-4 md:p-6">
+            <div class="dark:bg-gray-800 bg-white dark:text-gray-600 text-gray-500 relative border border-default rounded-sm shadow-sm p-4 md:p-6">
                 <!-- Modal body -->
-                <form @submit.prevent="submitRegister" class="pt-2 md:pt-4">
-                    <div class="mb-4">
-                        <label for="email" class="block mb-2.5 text-sm font-medium text-heading">
+                <form @submit.prevent="submitRegister" class="pt-1 md:pt-2">
+                    <div class="mb-2">
+                        <label for="email" class="block mb-1.5 text-sm font-medium text-heading">
                             Username
                         </label>
                         <input 
@@ -18,12 +18,12 @@
                         />
                         <p 
                             v-if="errors.name"
-                            class="mt-2.5 text-sm text-fg-danger-strong">
+                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
                             <span class="font-medium">{{ errors.name }}</span>
                         </p>
                     </div>
-                    <div class="mb-4">
-                        <label for="email" class="block mb-2.5 text-sm font-medium text-heading">
+                    <div class="mb-2">
+                        <label for="email" class="block mb-1.5 text-sm font-medium text-heading">
                             Your email
                         </label>
                         <input 
@@ -35,12 +35,12 @@
                         />
                         <p 
                             v-if="errors.email"
-                            class="mt-2.5 text-sm text-fg-danger-strong">
+                          class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
                             <span class="font-medium">{{ errors.email }}</span>
                         </p>
                     </div>
-                    <div class="mb-4">
-                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Your password</label>
+                    <div class="mb-2">
+                        <label for="password" class="block mb-1.5 text-sm font-medium text-heading">Your password</label>
                         <input 
                             type="password" 
                             id="password" 
@@ -50,12 +50,12 @@
                         />
                         <p 
                             v-if="errors.password"
-                            class="mt-2.5 text-sm text-fg-danger-strong">
+                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
                             <span class="font-medium">{{ errors.password }}</span>
                         </p>
                     </div>
-                    <div class="mb-4">
-                        <label for="password_confirmation" class="block mb-2.5 text-sm font-medium text-heading">Your password confirmation</label>
+                    <div class="mb-2">
+                        <label for="password_confirmation" class="block mb-1.5 text-sm font-medium text-heading">Your password confirmation</label>
                         <input 
                             type="password" 
                             id="password_confirmation" 
@@ -65,7 +65,7 @@
                         />
                         <p 
                             v-if="errors.password_confirmation"
-                            class="mt-2.5 text-sm text-fg-danger-strong">
+                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
                             <span class="font-medium">{{ errors.password_confirmation }}</span>
                         </p>
                     </div>
@@ -86,6 +86,9 @@
    
     // import logic untuk register
     import auth from '@/services/authentication/auth';
+
+    // import route
+    import router from '@/routes';
 
     // import validation untuk validasi inputan
     import { required, min, emailFormat } from '@/utils/validator';
@@ -151,7 +154,7 @@
     }
 
     // membuat event submit
-    const submitRegister =async ()=> {
+    const submitRegister = async ()=> {
 
         if (!validator()) {
             console.log("Ada error input");
@@ -161,19 +164,23 @@
         try {
             // kirim data ke backend
             const response = await auth.register(userRegister);
-            console.log("data user register:", response);
 
-            // redirect ke halaman dashbaord
+            // melakukan simpan token 
+            localStorage.setItem("token", response.data.token.value);
+
+            // mengamlihkan ke path dashboard
+             router.push("/dashboard")
+
         } catch (error) {
             // pengecekan error response status dari backend
-            if(error.response && error.response.status === 409) {
+            if (error.response && error.response.status === 409) {
                 errors.email = error.response.data.message;
+                console.error("Register gagal:", error.response.data);
+            } else {
                 console.error("Register gagal:", error);
-            return;
+            }
         }
-        console.error("Register gagal:", error.response);
     }
-}
 
 </script>
 

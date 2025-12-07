@@ -33,7 +33,7 @@ const auth = {
             const response = await apiBackEnd.post('auth/register', payload)
 
             // mengembalikan response yang dikirim dari back-end
-            return response.data 
+            return response.data
 
         } catch (error) {
           // melempar objek error
@@ -42,7 +42,7 @@ const auth = {
     },
 
     // membuat service untuk login
-    async login() {
+    async login(payload) {
         try {
             // bagian try untuk mengambil data dari api
              const response = await apiBackEnd.post('/auth/login', payload)
@@ -57,7 +57,8 @@ const auth = {
             return response.data
         } catch (error) {
          // bagian error untuk melempar error bila data dari api tidak ditemukan 
-        throw error.response?.data || { message: error.response }  
+          throw error
+        // throw error.response?.data || { message: error.response }  
         }
     }, 
 
