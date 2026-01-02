@@ -13,6 +13,11 @@
                             id="email" 
                             class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
                             placeholder="example@company.com"  />
+                        <p 
+                            v-if="loginErrors.email"
+                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
+                            <span class="font-medium">{{ loginErrors.email }}</span>
+                        </p>
                     </div>
                     <div class="mb-4">
                         <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Your password</label>
@@ -21,10 +26,25 @@
                             type="password" id="password" 
                              class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
                             placeholder="•••••••••"  />
+                        <p  v-if="loginErrors.password"
+                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
+                            <span class="font-medium">{{ loginErrors.password }}</span>
+                        </p>
                     </div>
                     <button 
                         type="submit" 
-                        class="text-white bg-brand border rounded-md hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none w-full mb-3">Login to your account</button>
+                        :disabled="loadingProcess.disable" 
+                        class="flex items-center justify-center gap-2 text-white bg-brand border rounded-md  hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium text-sm px-4 py-2.5 focus:outline-none w-full mb-3">
+                    <svg  
+                        v-if="loadingProcess.isLoading" 
+                        class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                        <path  class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
+                    </svg>
+
+                    <span>  {{ loadingProcess.isLoading ? 'Processing...' : 'Login' }}  </span>
+                    </button>
+
                     <div class="text-sm font-medium text-body">Belum punya akun? 
                         <router-link to="/register" class="text-fg-brand hover:underline">Register</router-link>
                     </div>
@@ -37,12 +57,46 @@
 <script setup>
     import { reactive } from 'vue';
     import auth from '@/services/authentication/auth';
+    import LoginValidator, { loginErrors } from '@/services/helpers/LoginValidator'
+    // import route
+    import { useRouter } from 'vue-router'
+    import router from '@/routes';
+
 
     // membuat object userRegister
     const userLogin = reactive({ email: '', password: '' })
-
+    const loadingProcess = reactive({ isLoading: false, disable: false })
     const submitLogin = async ()=> {
-        console.log('kesini')
+        try {
+            loadingProcess.isLoading = true
+            loadingProcess.disable = true
+            // mengosongkan objek errors terlebih dahulu
+            LoginValidator.resetErrors()
+
+            if (!LoginValidator.validateAll(userLogin)) return
+
+            // kirim data ke backend
+            const response = await auth.login(userLogin);
+
+            localStorage.setItem("token", response.data.token.value);
+            // mengalihkan kehalaman dashboard
+            router.push("/dashboard")
+        } catch (error) {
+            const errors = error?.response?.data?.errors
+            // validasi jika error email
+            if(errors?.email) {
+                loginErrors.email = errors.email 
+            }
+
+            // validasi jika error password
+            if(errors?.password) {
+                loginErrors.password = errors.password 
+            }
+
+        }finally {
+            loadingProcess.isLoading = false
+            loadingProcess.disable = false
+        }
     }
 </script>
 

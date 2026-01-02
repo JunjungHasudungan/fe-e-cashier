@@ -48,7 +48,7 @@ const auth = {
              const response = await apiBackEnd.post('/auth/login', payload)
 
             // mengecek apakah ada response data token yang dikirim 
-            if (response.data.token) {
+            if (response.data?.token) {
 
                 // menyimpan token kedalam local storage halaman user
                 localStorage.setItem('token', response.data.token)
