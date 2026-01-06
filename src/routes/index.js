@@ -2,25 +2,29 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
 // AppLayout untuk layout yang sudah berhasil login ataupun register
-import AppLayout from '@/layouts/App.vue'
-
-// AppLayout untuk layout yang sedang proses login ataupun register
-import GuestLayout from '@/layouts/Guest.vue'
+import AppLayout from '@/layouts/AppLayout.vue'
 
 // import components
 import WelcomePage from '@/pages/WelcomePage.vue'
 import DashboardPage from '@/pages/DashboardPage.vue'
 import Register from '@/pages/auth/Register.vue'
 import Login from '@/pages/auth/Login.vue'
+import WelcomeLayout from '@/layouts/WelcomeLayout.vue'
+import AuthLayout from '@/layouts/AuthLayout.vue'
 
 // membuat routes untuk semua komponents
 const routes = [
-   {
-        path: '/',
-        component: AppLayout,
-        children: [
-            { path: '', name: 'home', component: WelcomePage, meta: { title: 'Welcome' } },
-        ]
+    {
+      path: '/',
+      component: WelcomeLayout,
+      children: [
+        {
+          path: '',
+          name: 'home',
+          component: WelcomePage,
+          meta: { title: 'Welcome' }
+        }
+      ]
     },
     {
       path: '/dashboard',
@@ -35,14 +39,23 @@ const routes = [
       ]
     },
     {
-      path: '/',
-      component: GuestLayout,
-      children: [
-        // { path: '', name: '/', component: WelcomePage,  meta: { title: 'welcome',  requiresGuest: true } },
-        { path: 'register', component: Register, name: 'register', meta: { title: 'register', requiresGuest: true } },
-        { path: 'login', component: Login, name: 'login', meta: { title: 'login',  requiresGuest: true } },
-      ]
-    },
+    path: '/',
+    component: AuthLayout,
+    children: [
+      {
+        path: 'login',
+        name: 'login',
+        component: Login,
+        meta: { requiresGuest: true, title: 'Login' }
+      },
+      {
+        path: 'register',
+        name: 'register',
+        component: Register,
+        meta: { requiresGuest: true, title: 'Register' }
+      }
+    ]
+  },
 ]
 
 // membuat object router

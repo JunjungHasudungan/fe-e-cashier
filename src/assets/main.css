@@ -2,7 +2,38 @@
 @import "tailwindcss";
 @import "flowbite";
 
+@import "tailwindcss";
 
+@theme {
+  /* BACKGROUND */
+  --color-neutral-primary: #020617;
+  --color-neutral-primary-soft: #020617;
+  --color-neutral-secondary-soft: #0f172a;
+  --color-neutral-tertiary: #1e293b;
+
+  /* BORDER */
+  --color-default: #1e293b;
+  --color-default-medium: #334155;
+
+  /* TEXT */
+  --color-heading: #e5e7eb;
+  --color-body: #94a3b8;
+  --color-fg-brand: #22c55e;
+
+  /* STATUS */
+  --color-danger-soft: #450a0a;
+  --color-danger-subtle: #7f1d1d;
+  --color-fg-danger-strong: #fca5a5;
+
+  /* RADIUS */
+  --radius-base: 0.5rem;
+}
+
+/* BASE BODY */
+body {
+  background-color: var(--color-neutral-primary);
+  color: var(--color-body);
+}
 
 
 
