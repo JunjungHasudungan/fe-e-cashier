@@ -20,17 +20,50 @@
                         </p>
                     </div>
                     <div class="mb-4">
-                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading">Your password</label>
-                        <input 
-                            v-model="userLogin.password" 
-                            type="password" id="password" 
-                             class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="•••••••••"  />
-                        <p  v-if="loginErrors.password"
-                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
-                            <span class="font-medium">{{ loginErrors.password }}</span>
+                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading" >
+                            Your password
+                        </label>
+                        <div class="relative">
+                            <input v-model="userLogin.password" :type="showPassword ? 'text' : 'password'"  id="password"
+                            class="caret-white w-full  rounded-lg  bg-neutral-secondary-medium border border-default-medium  text-heading text-sm focus:ring-brand focus:border-brand px-3 py-2.5 pr-10  shadow-xs placeholder:text-body"  placeholder="•••••••••"
+                            />
+                            <button  type="button" @click="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none" >
+                           
+                            <svg v-if="!showPassword"  xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M2.458 12C3.732 7.943 7.523 5 12 5
+                                    c4.478 0 8.268 2.943 9.542 7
+                                    -1.274 4.057-5.064 7-9.542 7
+                                    -4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+
+                            <!-- eye closed -->
+                            <svg v-else  xmlns="http://www.w3.org/2000/svg"  class="h-5 w-5"  fill="none"  viewBox="0 0 24 24"  stroke="currentColor"  >
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M13.875 18.825A10.05 10.05 0 0112 19
+                                    c-4.478 0-8.268-2.943-9.543-7
+                                    a9.97 9.97 0 011.563-3.029" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6.18 6.18A9.958 9.958 0 0112 5
+                                    c4.478 0 8.268 2.943 9.543 7
+                                    a9.97 9.97 0 01-4.043 5.132" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 3l18 18" />
+                            </svg>
+                            </button>
+                        </div>
+
+                        <!-- ERROR -->
+                        <p
+                            v-if="loginErrors.password"
+                            class="mt-2 text-sm text-fg-danger-strong"
+                        >
+                            {{ loginErrors.password }}
                         </p>
-                    </div>
+                        </div>
+
                     <button 
                         type="submit" 
                         :disabled="loadingProcess.disable" 
@@ -55,7 +88,7 @@
 </template>
 
 <script setup>
-    import { reactive } from 'vue';
+    import { reactive,ref } from 'vue';
     import auth from '@/services/authentication/auth';
     import LoginValidator, { loginErrors } from '@/services/helpers/LoginValidator'
     // import route
@@ -66,6 +99,10 @@
     // membuat object userRegister
     const userLogin = reactive({ email: '', password: '' })
     const loadingProcess = reactive({ isLoading: false, disable: false })
+    const showPassword = ref(false)
+    const togglePassword = () => {
+        showPassword.value = !showPassword.value
+    }
     const submitLogin = async ()=> {
         try {
             loadingProcess.isLoading = true

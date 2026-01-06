@@ -1,16 +1,17 @@
 <template>
   <div class="min-h-screen bg-neutral-primary-soft">
-
     <!-- Top Navbar -->
     <TopNavBar @toggle-sidebar="toggleSidebar" />
 
     <!-- Sidebar -->
-    <SideBar :open="sidebarOpen" @close="sidebarOpen = false" />
+    <SideBar :open="sidebarOpen" @toggle="toggleSidebar" />
 
     <!-- Main Content -->
     <main
       class="pt-14 transition-all duration-300"
-      :class="sidebarOpen ? 'sm:ml-64 ml-0' : 'sm:ml-16 ml-0'"
+      :style="{
+            marginLeft: sidebarOpen ? '256px' : '64px'
+          }"
     >
       <div class="p-6">
         <router-view />

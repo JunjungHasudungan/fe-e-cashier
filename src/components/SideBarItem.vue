@@ -4,7 +4,10 @@
     class="flex items-center gap-3 px-3 py-2 rounded-base
            text-body hover:bg-neutral-tertiary hover:text-heading"
   >
-    <span class="text-lg">{{ icon }}</span>
+   <component
+      :is="icon"
+      class="w-5 h-5 shrink-0 text-heading"
+    />
 
     <span v-if="open" class="flex-1 whitespace-nowrap">
       {{ label }}
@@ -23,7 +26,7 @@
 <script setup>
 defineProps({
   label: String,
-  icon: String,
+  icon: Object,
   open: Boolean,
   badge: String,
   to: String
