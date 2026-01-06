@@ -8,27 +8,25 @@
                     <div class="mb-4">
                         <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Your email</label>
                         <input 
-                            v-model="userLogin.email" 
-                            type="email" 
-                            id="email" 
-                            class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="example@company.com"  />
-                        <p 
-                            v-if="loginErrors.email"
-                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
-                            <span class="font-medium">{{ loginErrors.email }}</span>
-                        </p>
+                            v-model="userLogin.email" type="email" id="email" 
+                            class="w-full rounded-lg bg-[var(--color-neutral-secondary-soft)] border border-[var(--color-default-medium)]
+                                    text-[var(--color-heading)] caret-[var(--color-heading)] placeholder:text-[var(--color-body)]
+                                    px-3 py-2.5 pr-10 focus:ring-2 focus:ring-[var(--color-fg-brand)] focus:border-[var(--color-fg-brand)]"
+                            placeholder="example@company.com"
+                            />
+                        <span v-if="loginErrors.email" class="mt-2 text-sm text-fg-danger-strong"> {{ loginErrors.email }} </span>
                     </div>
                     <div class="mb-4">
-                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading" >
-                            Your password
-                        </label>
+                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading" > Your password </label>
                         <div class="relative">
-                            <input v-model="userLogin.password" :type="showPassword ? 'text' : 'password'"  id="password"
-                            class="caret-white w-full  rounded-lg  bg-neutral-secondary-medium border border-default-medium  text-heading text-sm focus:ring-brand focus:border-brand px-3 py-2.5 pr-10  shadow-xs placeholder:text-body"  placeholder="•••••••••"
+                            <input 
+                                v-model="userLogin.password" :type="showPassword ? 'text' : 'password'"  id="password"
+                                class="w-full rounded-lg bg-[var(--color-neutral-secondary-soft)] border border-[var(--color-default-medium)]
+                                text-[var(--color-heading)] caret-[var(--color-heading)] placeholder:text-[var(--color-body)]
+                                px-3 py-2.5 pr-10 focus:ring-2 focus:ring-[var(--color-fg-brand)] focus:border-[var(--color-fg-brand)]"
+                                placeholder="•••••••••"
                             />
                             <button  type="button" @click="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none" >
-                           
                             <svg v-if="!showPassword"  xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" >
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -54,15 +52,8 @@
                             </svg>
                             </button>
                         </div>
-
-                        <!-- ERROR -->
-                        <p
-                            v-if="loginErrors.password"
-                            class="mt-2 text-sm text-fg-danger-strong"
-                        >
-                            {{ loginErrors.password }}
-                        </p>
-                        </div>
+                        <span v-if="loginErrors.password" class="mt-2 text-sm text-fg-danger-strong"> {{ loginErrors.password }} </span>
+                    </div>
 
                     <button 
                         type="submit" 
@@ -91,8 +82,6 @@
     import { reactive,ref } from 'vue';
     import auth from '@/services/authentication/auth';
     import LoginValidator, { loginErrors } from '@/services/helpers/LoginValidator'
-    // import route
-    import { useRouter } from 'vue-router'
     import router from '@/routes';
 
 
@@ -115,7 +104,6 @@
             // kirim data ke backend
             const response = await auth.login(userLogin);
 
-            localStorage.setItem("token", response.data.token.value);
             // mengalihkan kehalaman dashboard
             router.push("/dashboard")
         } catch (error) {

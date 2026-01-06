@@ -26,7 +26,7 @@
     <ul class="px-3 py-4 space-y-1 font-medium">
       <SideBarItem label="Dashboard" :icon="IconHome" :open="open" to="/dashboard" />
       <SideBarItem label="Inbox" :icon="IconInbox" :open="open" badge="2" />
-      <SideBarItem label="Users" :icon="IconUser" :open="open" />
+      <SideBarItem label="Management User" :icon="IconUser" :open="open" to="/management-user"/>
       <SideBarItem label="Products" :icon="IconWallet" :open="open" />
     </ul>
 

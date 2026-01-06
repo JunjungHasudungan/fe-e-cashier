@@ -1,4 +1,5 @@
 import axios from "axios";
+import { reactive } from "vue";
 
 // membuat configurasi api dari .env
 const apiBackEnd = axios.create({
@@ -6,6 +7,13 @@ const apiBackEnd = axios.create({
   headers: {
     'Content-Type': 'application/json'
   }
+})
+
+// global state
+const state = reactive({
+  user: JSON.parse(localStorage.getItem("user")),
+  token: localStorage.getItem("token"),
+  isAuthenticated: !!localStorage.getItem("token")
 })
 
 // membuat object auth
@@ -45,9 +53,19 @@ const auth = {
     async login(payload) {
         try {
             // bagian try untuk mengambil data dari api
-             const response = await apiBackEnd.post('/auth/login', payload)
+            const response = await apiBackEnd.post('/auth/login', payload)
+            const { token, user } = response.data.data
 
-            // mengecek apakah ada response data token yang dikirim 
+             // simpan ke state
+            state.token = token.value
+            state.user = user
+            state.isAuthenticated = true
+
+            localStorage.setItem("token", state.token)
+            localStorage.setItem("user", JSON.stringify(user))
+            
+            return user
+            // // mengecek apakah ada response data token yang dikirim 
             if (response.data?.token) {
 
                 // menyimpan token kedalam local storage halaman user
@@ -65,8 +83,14 @@ const auth = {
     // membuat service untuk logout
     async logOut() {
         // menghapus token yang disimpan dari local storage halaman user
-        localStorage.removeItem('token')
-    }
+        // localStorage.removeItem('token')
+        state.user = null
+        state.token = null
+        state.isAuthenticated = false
+        localStorage.clear()
+    },
+  // state diexport
+  state
 }
 
 // melakukan export auth untuk digunakan ditempat lain

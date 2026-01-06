@@ -11,6 +11,7 @@ import Register from '@/pages/auth/Register.vue'
 import Login from '@/pages/auth/Login.vue'
 import WelcomeLayout from '@/layouts/WelcomeLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
+import IndexUser from '@/pages/admin/manangementUser/IndexUser.vue'
 
 // membuat routes untuk semua komponents
 const routes = [
@@ -35,6 +36,18 @@ const routes = [
           name: 'dashboard',
           component: DashboardPage,
           meta: { requiresAuth: true, title: 'Dashboard' }
+        }
+      ]
+    },
+     {
+      path: '/management-user',
+      component: AppLayout,
+      children: [
+        {
+          path: '',           // default child
+          name: 'manangemen-user',
+          component: IndexUser,
+          meta: { requiresAuth: true, title: 'User' }
         }
       ]
     },

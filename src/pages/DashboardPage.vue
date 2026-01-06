@@ -2,14 +2,7 @@
   <div class="space-y-8">
 
     <!-- Page Heading -->
-    <div>
-      <h1 class="text-2xl font-semibold text-heading">
-        Dashboard
-      </h1>
-      <p class="text-sm text-body mt-1">
-        Ringkasan statistik aplikasi
-      </p>
-    </div>
+     <Heading title="Dashboard" subTitle="Ringkasan statistik aplikasi" />
 
     <!-- 3 Card Statistik -->
     <div class="grid grid-cols-12 gap-6">
@@ -65,3 +58,8 @@
 
   </div>
 </template>
+
+<script setup>
+  import Heading from '@/components/Heading.vue';
+
+</script>
