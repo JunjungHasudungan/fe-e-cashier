@@ -32,7 +32,7 @@ const routes = [
       component: AppLayout,
       children: [
         {
-          path: '',           // default child
+          path: '',           
           name: 'dashboard',
           component: DashboardPage,
           meta: { requiresAuth: true, title: 'Dashboard' }
@@ -44,7 +44,7 @@ const routes = [
       component: AppLayout,
       children: [
         {
-          path: '',           // default child
+          path: '',          
           name: 'manangemen-user',
           component: IndexUser,
           meta: { requiresAuth: true, title: 'User' }

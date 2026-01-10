@@ -2,7 +2,7 @@
   <div class="space-y-8">
 
     <!-- Page Heading -->
-     <Heading title="Dashboard" subTitle="Ringkasan statistik aplikasi" />
+     <Heading :isVisable="isVisable === 'data-table'" title="Dashboard" subTitle="Ringkasan statistik aplikasi" />
 
     <!-- 3 Card Statistik -->
     <div class="grid grid-cols-12 gap-6">
@@ -61,5 +61,7 @@
 
 <script setup>
   import Heading from '@/components/Heading.vue';
+  import { ref } from 'vue';
 
+  const isVisable = ref("data-table")
 </script>
