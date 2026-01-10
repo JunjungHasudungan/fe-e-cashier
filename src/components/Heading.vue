@@ -1,5 +1,5 @@
 <template>
-    <div v-show="isVisable">
+    <div v-show="card">
       <h1 class="text-2xl font-semibold text-heading"> {{ title }} </h1>
       <p class="text-sm text-body mt-1"> {{ subTitle }} </p>
     </div>
@@ -9,6 +9,6 @@
     defineProps({
         title: String,
         subTitle: String,
-        isVisable: Boolean
+        card: Boolean
     })
 </script>

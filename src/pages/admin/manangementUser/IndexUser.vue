@@ -2,57 +2,22 @@
   <div class="space-y-8">
 
     <!-- Page Heading -->
-     <Heading :isVisable="isVisibable === 'user-table'" title="Management Pengguna" subTitle="Ringkasan Seluruh Pengguna aplikasi" />
+     <Heading :card="isVisibable === 'user-table'" title="Management Pengguna" subTitle="Ringkasan Seluruh Pengguna aplikasi" />
 
         <button 
             v-show="isVisibable == 'user-table'"
             @click="createUser"
-            class="text-white bg-brand box-border border border-blue-600 hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" type="button">
-        Toggle modal
+            class="inline-flex items-center  text-white bg-brand hover:bg-blue-800 box-border border border-blue-600 focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" 
+            type="button">
+       <svg class="w-4 h-4 me-1.5 -ms-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>
+            User
         </button>
 
         <!-- Main modal -->
-        <div v-show="isVisibable == 'create-user'" 
+        <div  
+            v-show="isVisibable == 'create-user'"  
             class="fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <div class="relative w-full max-w-lg max-h-full">
-                <!-- Modal content -->
-                <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-4 md:p-6">
-                    <!-- Modal body -->
-                    <form action="#">
-                        <div class="grid gap-4 grid-cols-2 py-4 md:py-6">
-                            <div class="col-span-2">
-                                <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Name</label>
-                                <input type="text" name="name" id="name" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="Type product name" required="">
-                            </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <label for="price" class="block mb-2.5 text-sm font-medium text-heading">Price</label>
-                                <input type="number" name="price" id="price" class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" placeholder="$2999" required="">
-                            </div>
-                            <div class="col-span-2 sm:col-span-1">
-                                <label for="category" class="block mb-2.5 text-sm font-medium text-heading">Category</label>
-                                <select id="category" class="block w-full px-3 py-2.5 bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand px-3 py-2.5 shadow-xs placeholder:text-body">
-                                    <option selected="">Select category</option>
-                                    <option value="TV">TV/Monitors</option>
-                                    <option value="PC">PC</option>
-                                    <option value="GA">Gaming/Console</option>
-                                    <option value="PH">Phones</option>
-                                </select>
-                            </div>
-                            <div class="col-span-2">
-                                <label for="description" class="block mb-2.5 text-sm font-medium text-heading">Product Description</label>
-                                <textarea id="description" rows="4" class="block bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full p-3.5 shadow-xs placeholder:text-body" placeholder="Write product description here"></textarea>                    
-                            </div>
-                        </div>
-                        <div class="flex items-center space-x-4 border-t border-default pt-4 md:pt-6">
-                            <button type="submit" class="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-transparent focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
-                                <svg class="w-4 h-4 me-1.5 -ms-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>
-                                Add new product
-                            </button>
-                            <button @click="closeCreateUser" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancel</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
+            <CardCreateUser @btn-close="closeFormCreate" />
         </div>
 
     
@@ -116,12 +81,14 @@
 
 <script setup> 
     import Heading from '@/components/Heading.vue';
+    import CardCreateUser from '@/components/User/CardCreateUser.vue';
     import { ref } from 'vue';
 
     const isVisibable = ref("user-table")
-    const createUser = ()=> {
-        isVisibable.value = 'create-user'
+    const createUser = ()=> isVisibable.value = 'create-user'
+
+    const closeFormCreate =  () =>  {
+        isVisibable.value = 'user-table'
     }
-    const closeCreateUser =  () =>  isVisibable.value = 'user-table'
 
 </script>

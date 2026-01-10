@@ -2,7 +2,7 @@
   <div class="space-y-8">
 
     <!-- Page Heading -->
-     <Heading :isVisable="isVisable === 'data-table'" title="Dashboard" subTitle="Ringkasan statistik aplikasi" />
+     <Heading :card="isVisable === 'data-table'" title="Dashboard" subTitle="Ringkasan statistik aplikasi" />
 
     <!-- 3 Card Statistik -->
     <div class="grid grid-cols-12 gap-6">
