@@ -49,6 +49,14 @@ const auth = {
         }
     },
 
+    async registerUser(payload) {
+      try {
+
+      }catch(error) {
+        throw error
+      }
+    },
+
     // membuat service untuk login
     async login(payload) {
         try {

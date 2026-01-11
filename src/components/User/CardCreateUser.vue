@@ -59,7 +59,7 @@
     const btnSendDataUser = async ()=> { 
         try {
             console.log(user)
-            const result = await auth.register(user);
+            const result = await auth.registerUser(user);
             
         } catch (error) {
             

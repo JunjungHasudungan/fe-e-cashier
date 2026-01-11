@@ -12,6 +12,7 @@ import Login from '@/pages/auth/Login.vue'
 import WelcomeLayout from '@/layouts/WelcomeLayout.vue'
 import AuthLayout from '@/layouts/AuthLayout.vue'
 import IndexUser from '@/pages/admin/manangementUser/IndexUser.vue'
+import IndexRole from '@/pages/admin/ManangementRole/IndexRole.vue'
 
 // membuat routes untuk semua komponents
 const routes = [
@@ -48,6 +49,18 @@ const routes = [
           name: 'manangemen-user',
           component: IndexUser,
           meta: { requiresAuth: true, title: 'User' }
+        }
+      ]
+    },
+    {
+      path: '/management-role',
+      component: AppLayout,
+      children: [
+        {
+          path: '',          
+          name: 'management-role',
+          component: IndexRole,
+          meta: { requiresAuth: true, title: 'Jabatan tambahan' }
         }
       ]
     },
