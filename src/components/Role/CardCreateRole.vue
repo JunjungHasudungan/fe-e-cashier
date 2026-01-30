@@ -33,7 +33,12 @@
                     <button type="submit" class="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-blue-600 focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                         Submit
                     </button>
-                    <button @click="$emit('btnClose')" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancel</button>
+                    <button 
+                        @click="btnClose" 
+                        type="button" 
+                        class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                        Cancel
+                </button>
                 </div>
             </form>
         </div>
@@ -59,5 +64,9 @@
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const btnClose = ()=> {
+        
     }
 </script>

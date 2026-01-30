@@ -21,7 +21,7 @@
         <div  
             v-show="isVisibable == 'create-role'"  
             class="fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <CardCreateRole @btn-close="closeFormCreate" :data-provide="state.roles"/>
+            <CardCreateRole :data-provide="state.roles"/>
         </div>
 
     

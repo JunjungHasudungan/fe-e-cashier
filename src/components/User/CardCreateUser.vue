@@ -44,7 +44,12 @@
                     <button type="submit" class="inline-flex items-center  text-white bg-brand hover:bg-brand-strong box-border border border-blue-600 focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
                         Submit
                     </button>
-                    <button @click="$emit('btnClose')" type="button" class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">Cancel</button>
+                    <button  
+                        type="button" 
+                        @click="btnClose()"
+                        class="text-body bg-neutral-secondary-medium box-border border border-default-medium hover:bg-neutral-tertiary-medium hover:text-heading focus:ring-4 focus:ring-neutral-tertiary shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none">
+                        Cancel
+                    </button>
                 </div>
             </form>
         </div>
@@ -52,10 +57,31 @@
 </template>
 
 <script setup>
-    import { reactive, ref } from 'vue';
+    import { reactive, ref, computed } from 'vue';
     import auth from '@/services/authentication/auth';
+    import { swalConfirm } from '@/utils/helper';
     const user = reactive({ name: '', email: '', password: '', role: '' })
     const listRole = ref({ student: 'student', teacher: 'teacher', parent: 'parent' })
+    const emit = defineEmits('closeForm')
+
+    const btnClose = ()=> {
+       if (!isFormFilled.value) {
+            emit('closeForm')
+        }
+
+        swalConfirm((result) => {
+            if (result.isConfirmed) {
+                emit('closeForm')
+            }
+        })
+
+    }
+
+    const isFormFilled = computed(() => {
+        return Object.values(user).some(
+            value => value !== null && value !== ''
+        )
+    })
     const btnSendDataUser = async ()=> { 
         try {
             console.log(user)
