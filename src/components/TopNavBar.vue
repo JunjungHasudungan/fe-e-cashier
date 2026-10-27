@@ -1,11 +1,7 @@
 <template>
   <nav class="fixed top-0 z-50 w-full bg-neutral-primary-soft border-b border-default">
     <div class="px-4 py-3 flex items-center justify-between">
-
-      <!-- Left -->
       <div class="flex items-center gap-3">
-
-        <!-- Toggle Sidebar -->
         <button
           @click="$emit('toggle-sidebar')"
           class="text-heading hover:bg-neutral-secondary-medium p-2 rounded-base"
@@ -59,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref, computed  } from 'vue'
+import { ref, computed, onMounted  } from 'vue'
 import { useRouter } from 'vue-router'
 import auth from '@/services/authentication/auth'
 
@@ -67,6 +63,12 @@ const router = useRouter()
 const appName = import.meta.env.VITE_APP_NAME || 'Dashboard'
 const open = ref(false)
 const user = computed(() => auth.state.user)
+const props = defineProps({
+  user: {
+    type: Object,
+    default: null
+  }
+})
 
 const logout = () => {
   localStorage.removeItem('token')

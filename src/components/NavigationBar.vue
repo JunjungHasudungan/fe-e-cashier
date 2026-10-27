@@ -16,7 +16,7 @@
 </template> -->
 <template>
     <header class="fixed w-full z-20 top-0 start-0">
-        <nav class="bg-neutral-primary">
+        <nav class="dark:bg-gray-200 bg-white">
             <div class="flex justify-between items-center mx-auto max-w-screen-xl p-4">
 
                 <!-- Logo -->

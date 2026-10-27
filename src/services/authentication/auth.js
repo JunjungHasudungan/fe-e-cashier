@@ -34,17 +34,21 @@ const auth = {
         return response.data
     },
 
-    // membuat serice untuk register
-    async register(payload) { // payload variable objek yang akan dikirim
+    async register(payload) { 
         try {
-            // bagian try untuk mengambil data dari api
             const response = await apiBackEnd.post('auth/register', payload)
+            const {token, user} = response?.data.data
+            
+            state.token = token
+            state.user = user
+            state.isAuthenticated = true
 
-            // mengembalikan response yang dikirim dari back-end
+            localStorage.setItem("token", state.token)
+            localStorage.setItem("user", JSON.stringify(user))
+
             return response.data
 
         } catch (error) {
-          // melempar objek error
         throw error
         }
     },

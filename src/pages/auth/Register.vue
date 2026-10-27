@@ -2,76 +2,51 @@
     <div class="rounded-sm flex fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
-            <div class="dark:bg-gray-800 bg-white dark:text-gray-600 text-gray-500 relative border border-default rounded-sm shadow-sm p-4 md:p-6">
+            <div class="dark:bg-gray-800 bg-white dark:text-gray-600 text-gray-500 relative border border-default border-gray-400 rounded-lg shadow-sm p-4 md:p-6">
                 <!-- Modal body -->
                 <form @submit.prevent="submitRegister" class="pt-1 md:pt-2">
+                    <TitleForm title="Sign up to our platform" />
                     <div class="mb-2">
-                        <label for="email" class="block mb-1.5 text-sm font-medium text-heading">
-                            Username
-                        </label>
-                        <input 
+                        <BaseInput 
+                            v-model="userRegister.name" 
+                            :errorText="errors.name" 
+                            label="nama" 
+                            id="username"
                             type="text" 
-                            id="username" 
-                            v-model="userRegister.name"
-                            class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="Jhon Doe" 
+                            placeholder="write your name"
                         />
-                        <p 
-                            v-if="errors.name"
-                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
-                            <span class="font-medium">{{ errors.name }}</span>
-                        </p>
                     </div>
                     <div class="mb-2">
-                        <label for="email" class="block mb-1.5 text-sm font-medium text-heading">
-                            Your email
-                        </label>
-                        <input 
+                         <BaseInput 
+                            v-model="userRegister.email" 
+                            :error-text="errors.email" 
+                            label="email" 
+                            id="email"
                             type="email" 
-                            id="email" 
-                            v-model="userRegister.email"
-                            class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="jhon@example.com" 
+                            placeholder="jhon@example.com"
                         />
-                        <p 
-                            v-if="errors.email"
-                          class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
-                            <span class="font-medium">{{ errors.email }}</span>
-                        </p>
                     </div>
                     <div class="mb-2">
-                        <label for="password" class="block mb-1.5 text-sm font-medium text-heading">Your password</label>
-                        <input 
-                            type="password" 
-                            id="password" 
-                            v-model="userRegister.password"
-                            class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="•••••••••"
+                        <InputPassword 
+                            label="password" 
+                            v-model="userRegister.password" 
+                            :text-error="errors.password"
                         />
-                        <p 
-                            v-if="errors.password"
-                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
-                            <span class="font-medium">{{ errors.password }}</span>
-                        </p>
                     </div>
                     <div class="mb-2">
-                        <label for="password_confirmation" class="block mb-1.5 text-sm font-medium text-heading">Your password confirmation</label>
-                        <input 
-                            type="password" 
-                            id="password_confirmation" 
-                            v-model="userRegister.password_confirmation"
-                            class="rounded-lg bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="•••••••••" 
+                        <InputPassword 
+                            label="password konfirmasi" 
+                            v-model="userRegister.password_confirmation" 
+                            :text-error="errors.password_confirmation"
                         />
-                        <p 
-                            v-if="errors.password_confirmation"
-                            class="mt-2.5 font-light dark:text-red-600 text-fg-danger-strong">
-                            <span class="font-medium">{{ errors.password_confirmation }}</span>
-                        </p>
                     </div>
-                    <button 
-                        type="submit" 
-                        class="text-white bg-brand border rounded-md hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none w-full mb-3">Register your account</button>
+                    <BtnSubmit 
+                        :disabled="!isCompleted || loading.submit"
+                        :loading="loading.disabled" 
+                        :completed="isCompleted"
+                        change="bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                        label="Register your account"
+                    />
                     <div class="text-sm font-medium text-body">already has account? 
                         <router-link to="/login" class="text-fg-brand hover:underline">Login</router-link>
                     </div>
@@ -82,25 +57,26 @@
 </template>
 
 <script setup>
-    import { reactive } from 'vue';
-   
-    // import logic untuk register
+    import TitleForm from '@/components/utils/TitleForm.vue';
+    import BaseInput from '@/components/utils/BaseInput.vue';
+    import BtnSubmit from '@/components/utils/BtnSubmit.vue';
+    import InputPassword from '@/components/utils/InputPassword.vue';
+    import { computed, reactive } from 'vue';
     import auth from '@/services/authentication/auth';
-
-    // import route
     import router from '@/routes';
 
     // import validation untuk validasi inputan
     import { required, min, emailFormat } from '@/utils/validator';
     
-    // membuat object inputan userRegister
     const userRegister = reactive({ name: '', email: '', password: '', password_confirmation: ''})
-
-    // membut object error inputan user
     const errors = reactive({ name: '', email: '', password: '', password_confirmation: ''})
-
+    const loading = reactive({ submit: false, disabled: false })
     // membut object fieldName inputan user
     const fields = reactive({ name: 'nama', email: 'email', password: 'password', password_confirmation: 'password konfirmasi'})
+
+    const isCompleted = computed(()=> {
+        return Object.values(userRegister).every(item=> String(item).trim() !== '')
+    })
 
     /* 
     next todo:
@@ -109,7 +85,6 @@
     */
     // membuat reset inputan
     const resetFieldRegister = ()=> {
-        // mengosongkan objek user Register
         Object.keys(userRegister).forEach(key => {
             userRegister[key] = "";
         });
@@ -162,9 +137,11 @@
         }
 
         try {
-            // kirim data ke backend
+            loading.submit = true
+            loading.disabled = true
             const response = await auth.register(userRegister);
 
+            console.log('response', response)
             // melakukan simpan token 
             localStorage.setItem("token", response.data.token.value);
 
@@ -179,7 +156,11 @@
             } else {
                 console.error("Register gagal:", error);
             }
+        } finally {
+            loading.submit = false
+            loading.disabled = false
         }
+
     }
 
 </script>

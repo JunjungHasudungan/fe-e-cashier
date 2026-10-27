@@ -1,29 +1,29 @@
 <template>
-    <div class="rounded-sm flex fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+    <div class="rounded-sm shadow-xs flex fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-md max-h-full">
             <!-- Modal content -->
-            <div class="dark:bg-gray-800 bg-white dark:text-gray-600 text-gray-500 relative border border-default rounded-sm shadow-sm p-4 md:p-6">
+            <div class="dark:bg-gray-800 bg-white dark:text-red-600 text-red-700 relative border border-default rounded-lg border-gray-200 shadow-sm p-4 md:p-6">
                 <!-- Modal body -->
                 <form @submit.prevent="submitLogin" class="pt-2 md:pt-3">
+                    <TitleForm title="Sign in to our platform" />
+                    
                     <div class="mb-4">
-                        <label for="email" class="block mb-2.5 text-sm font-medium text-heading">Your email</label>
-                        <input 
-                            v-model="userLogin.email" type="email" id="email" 
-                            class="w-full rounded-lg bg-[var(--color-neutral-secondary-soft)] border border-[var(--color-default-medium)]
-                                    text-[var(--color-heading)] caret-[var(--color-heading)] placeholder:text-[var(--color-body)]
-                                    px-3 py-2.5 pr-10 focus:ring-2 focus:ring-[var(--color-fg-brand)] focus:border-[var(--color-fg-brand)]"
+                        <BaseInput 
+                            v-model="userLogin.email" 
+                            :errorText="loginErrors.email" 
+                            label="Email" 
+                            id="email"
+                            type="email" 
                             placeholder="example@company.com"
-                            />
-                        <span v-if="loginErrors.email" class="mt-2 text-sm text-fg-danger-strong"> {{ loginErrors.email }} </span>
+                        />
                     </div>
                     <div class="mb-4">
-                        <label for="password" class="block mb-2.5 text-sm font-medium text-heading" > Your password </label>
+                        
+                        <label for="password" class="block mb-2.5 text-sm font-semibold text-gray-700 dark:text-gray-300" > Your password </label>
                         <div class="relative">
                             <input 
                                 v-model="userLogin.password" :type="showPassword ? 'text' : 'password'"  id="password"
-                                class="w-full rounded-lg bg-[var(--color-neutral-secondary-soft)] border border-[var(--color-default-medium)]
-                                text-[var(--color-heading)] caret-[var(--color-heading)] placeholder:text-[var(--color-body)]
-                                px-3 py-2.5 pr-10 focus:ring-2 focus:ring-[var(--color-fg-brand)] focus:border-[var(--color-fg-brand)]"
+                               class="bg-neutral-secondary-medium border border-default-medium text-gray-900 dark:text-gray-300 text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
                                 placeholder="•••••••••"
                             />
                             <button  type="button" @click="togglePassword" class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white focus:outline-none" >
@@ -55,19 +55,13 @@
                         <span v-if="loginErrors.password" class="mt-2 text-sm text-fg-danger-strong"> {{ loginErrors.password }} </span>
                     </div>
 
-                    <button 
-                        type="submit" 
-                        :disabled="loadingProcess.disable" 
-                        class="flex items-center justify-center gap-2 text-white bg-brand border rounded-md  hover:bg-brand-strong focus:ring-4 focus:ring-brand-medium shadow-xs font-medium text-sm px-4 py-2.5 focus:outline-none w-full mb-3">
-                    <svg  
-                        v-if="loadingProcess.isLoading" 
-                        class="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-                        <path  class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z" />
-                    </svg>
-
-                    <span>  {{ loadingProcess.isLoading ? 'Loading...' : 'Login' }}  </span>
-                    </button>
+                    <BtnSubmit 
+                        :disabled="!isCompleted || loadingProcess.disable"
+                        :loading="loadingProcess.disable" 
+                        :completed="isCompleted"
+                        change="bg-blue-600 hover:bg-blue-700 cursor-pointer"
+                        label="Login"
+                    />
 
                     <div class="text-sm font-medium text-body">Belum punya akun? 
                         <router-link to="/register" class="text-fg-brand hover:underline">Register</router-link>
@@ -79,9 +73,12 @@
 </template>
 
 <script setup>
-    import { reactive,ref } from 'vue';
+    import { computed, reactive,ref } from 'vue';
     import auth from '@/services/authentication/auth';
     import LoginValidator, { loginErrors } from '@/services/helpers/LoginValidator'
+    import BaseInput from '@/components/utils/BaseInput.vue';
+    import BtnSubmit from '@/components/utils/BtnSubmit.vue';
+    import TitleForm from '@/components/utils/TitleForm.vue';
     import router from '@/routes';
 
 
@@ -89,9 +86,15 @@
     const userLogin = reactive({ email: '', password: '' })
     const loadingProcess = reactive({ isLoading: false, disable: false })
     const showPassword = ref(false)
+    
     const togglePassword = () => {
         showPassword.value = !showPassword.value
     }
+
+    const isCompleted = computed(()=> {
+        return Object.values(userLogin).every(item=> String(item).trim() !== '')
+    })
+
     const submitLogin = async ()=> {
         try {
             loadingProcess.isLoading = true
