@@ -2,18 +2,22 @@
     <div class="relative w-full max-w-lg max-h-full">
         <!-- Modal content -->
         <div class="relative bg-neutral-primary-soft border border-default rounded-base shadow-sm p-3 md:p-4">
+            
+            <HeaderForm title="buat user baru"/>
+            
             <!-- Modal body -->
             <form @submit.prevent="btnSendDataUser">
+
                 <div class="grid gap-4 grid-cols-2 py-1 md:py-2">
                     <div class="col-span-2">
-                        <label for="name" class="block mb-2.5 text-sm font-medium text-heading">Name</label>
-                        <input 
-                            type="text" 
+                        <BaseInput 
                             v-model="user.name" 
-                            id="name" 
-                            class="bg-neutral-secondary-medium border border-default-medium text-heading text-sm rounded-base focus:ring-brand focus:border-brand block w-full px-3 py-2.5 shadow-xs placeholder:text-body" 
-                            placeholder="Type product name"
-                        >
+                            :error-text="errors.name" 
+                            label="nama" 
+                            id="username"
+                            type="text" 
+                            placeholder="write name here."
+                        />
                     </div>
                     <div class="col-span-2 sm:col-span-1">
                         <label for="price" class="block mb-2.5 text-sm font-medium text-heading">Price</label>
@@ -59,22 +63,28 @@
 <script setup>
     import { reactive, ref, computed } from 'vue';
     import auth from '@/services/authentication/auth';
+    import BaseInput from '../utils/BaseInput.vue';
+    import HeaderForm from '../utils/HeaderForm.vue';
     import { swalConfirm } from '@/utils/helper';
     const user = reactive({ name: '', email: '', password: '', role: '' })
     const listRole = ref({ student: 'student', teacher: 'teacher', parent: 'parent' })
     const emit = defineEmits('closeForm')
 
-    const btnClose = ()=> {
-       if (!isFormFilled.value) {
-            emit('closeForm')
+    const props = defineProps({
+        modal: {
+            type: Object,
+            required: true
+        },
+        store: {
+            type: Function,
+            required: true
         }
+    })
 
-        swalConfirm((result) => {
-            if (result.isConfirmed) {
-                emit('closeForm')
-            }
-        })
-
+    const errors = reactive({name: ''})
+    const btnClose = ()=> {
+        props.modal.create = false
+    //    console.log('props', )
     }
 
     const isFormFilled = computed(() => {

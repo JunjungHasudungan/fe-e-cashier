@@ -141,8 +141,6 @@
             loading.disabled = true
             const response = await auth.register(userRegister);
 
-            console.log('response', response)
-            // melakukan simpan token 
             localStorage.setItem("token", response.data.token.value);
 
             // mengamlihkan ke path dashboard

@@ -9,8 +9,8 @@
         />
 
         <button 
-            v-show="isVisibable == 'user-table'"
-            @click="createUser"
+            
+            @click="showModal.create = true"
             class="inline-flex items-center  text-white bg-brand hover:bg-blue-800 box-border border border-blue-600 focus:ring-4 focus:ring-brand-medium shadow-xs font-medium leading-5 rounded-base text-sm px-4 py-2.5 focus:outline-none" 
             type="button">
        <svg class="w-4 h-4 me-1.5 -ms-0.5" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7 7V5"/></svg>
@@ -18,11 +18,16 @@
         </button>
 
         <!-- Main modal -->
-        <div  
-            v-show="isVisibable == 'create-user'"  
-            class="fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-            <CardCreateUser @close-form="closeFormCreate" />
-        </div>
+         <Teleport to="body">
+             <div  
+                 v-if="showModal.create == true"  
+                 class="fixed inset-0 z-50 flex justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
+                 <CardCreateUser 
+                    :modal="showModal" 
+                    :store="storeUser"
+                    />
+             </div>
+         </Teleport>
 
     
         <div v-show="isVisibable == 'user-table'"
@@ -39,17 +44,18 @@
 
 
 <script setup> 
-    import { ref } from 'vue';
+    import { ref, reactive, onMounted } from 'vue';
     import Heading from '@/components/Heading.vue';
     import CardCreateUser from '@/components/User/CardCreateUser.vue';
     import TableUser from '@/components/User/TableUser.vue';
     import SearchUser from '@/components/User/SearchUser.vue';
-
+    import useStateUser from '@/services/user/useStateUser';
+    const { getListUser, storeUser } = useStateUser()
+    onMounted(()=> {
+        getListUser()
+    })
     const isVisibable = ref("user-table")
-    const createUser = ()=> isVisibable.value = 'create-user'
+    const showModal = reactive({create: false, edit: false})
 
-    const closeFormCreate =  () =>  {
-        isVisibable.value = 'user-table'
-    }
 
 </script>

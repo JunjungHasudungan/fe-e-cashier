@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-neutral-primary-soft">
+  <div class="min-h-screen dark:bg-neutral-primary-soft">
     <!-- Top Navbar -->
     <TopNavBar @toggle-sidebar="toggleSidebar" />
 
