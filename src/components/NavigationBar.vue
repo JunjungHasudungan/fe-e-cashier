@@ -15,72 +15,85 @@
     </header>
 </template> -->
 <template>
-    <header class="fixed w-full z-20 top-0 start-0">
-        <nav class="dark:bg-gray-200 bg-white">
-            <div class="flex justify-between items-center mx-auto max-w-screen-xl p-4">
+  <header class="fixed w-full z-20 top-0 start-0">
+    <nav class="dark:bg-gray-200 bg-white">
+      <div
+        class="flex justify-between items-center mx-auto max-w-screen-xl p-4"
+      >
+        <!-- Logo -->
+        <router-link to="/" class="flex items-center space-x-3">
+          <img src="https://flowbite.com/docs/images/logo.svg" class="h-7" />
+          <span class="text-green-600 text-xl font-semibold">{{ title }}</span>
+        </router-link>
 
-                <!-- Logo -->
-                <router-link to="/" class="flex items-center space-x-3">
-                    <img src="https://flowbite.com/docs/images/logo.svg" class="h-7">
-                    <span class="text-green-600 text-xl font-semibold">{{ title }}</span>
-                </router-link>
+        <!-- Menu (Dynamic) -->
+        <div class="flex items-center gap-4">
+          <!-- Jika belum login -->
+          <template v-if="!isLoggedIn">
+            <router-link
+              to="/login"
+              class="text-sm font-medium text-blue-600 hover:underline"
+            >
+              Login
+            </router-link>
 
-                <!-- Menu (Dynamic) -->
-                <div class="flex items-center gap-4">
+            <router-link
+              to="/register"
+              class="text-sm font-medium text-blue-600 hover:underline"
+            >
+              Register
+            </router-link>
+          </template>
 
-                    <!-- Jika belum login -->
-                    <template v-if="!isLoggedIn">
-                        <router-link to="/login" class="text-sm font-medium text-blue-600 hover:underline">
-                            Login
-                        </router-link>
+          <!-- Jika sudah login -->
+          <template v-else>
+            <router-link
+              :to="dashboardPath"
+              class="text-sm font-medium text-blue-200 hover:underline"
+            >
+              Dashboard
+            </router-link>
 
-                        <router-link to="/register" class="text-sm font-medium text-blue-600 hover:underline">
-                            Register
-                        </router-link>
-                    </template>
-
-                    <!-- Jika sudah login -->
-                    <template v-else>
-                        <router-link to="/dashboard" class="text-sm font-medium text-blue-200 hover:underline">
-                            Dashboard
-                        </router-link>
-
-                        <button @click="logout"
-                            class="text-sm font-medium text-red-400 hover:underline">
-                            Logout
-                        </button>
-                    </template>
-
-                </div>
-            </div>
-        </nav>
-    </header>
+            <button
+              @click="logout"
+              class="text-sm font-medium text-red-400 hover:underline"
+            >
+              Logout
+            </button>
+          </template>
+        </div>
+      </div>
+    </nav>
+  </header>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
-import { useRouter } from 'vue-router'
-import DashboardPage from '@/pages/DashboardPage.vue'
+import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 
-const router = useRouter()
-const title = import.meta.env.VITE_APP_NAME || "e-undangan"
+const router = useRouter();
+const title = import.meta.env.VITE_APP_NAME || "e-undangan";
+const user = JSON.parse(localStorage.getItem("user" || "null"));
 
-const isLoggedIn = ref(false)
+const dashboardPath =
+  user?.role === "admin" ? "/admin/dashboard" : "/member/dashboard";
+
+const isLoggedIn = ref(false);
 
 onMounted(() => {
-    isLoggedIn.value = !!localStorage.getItem("token")
-})
+  isLoggedIn.value = !!localStorage.getItem("token");
+});
 
 watch(
   () => router.fullPath,
   () => {
-    isLoggedIn.value = !!localStorage.getItem("token")
-  }
-)
+    isLoggedIn.value = !!localStorage.getItem("token");
+  },
+);
 
 const logout = () => {
-    localStorage.removeItem("token")
-    isLoggedIn.value = false
-    router.push("/")
-}
+  localStorage.removeItem("token");
+  isLoggedIn.value = false;
+  router.push("/");
+};
 </script>
